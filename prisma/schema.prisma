@@ -1,0 +1,123 @@
+// Prisma schema for Unified Patient Manager
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User roles enum
+enum UserRole {
+  PROVIDER
+  PATIENT
+  STAFF
+}
+
+// Provider model (Doctors, Nurses, Hospital Staff with provider access)
+model Provider {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      String   // e.g., "Doctor", "Nurse"
+  permissions String[] // Array of permissions
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("providers")
+}
+
+// Patient model with medical records
+model Patient {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  password          String
+  firstName         String
+  lastName          String
+  dateOfBirth       DateTime?
+  phone             String?
+  address           String?
+  
+  // Medical information
+  vitals            Json?     // { bloodPressure, heartRate, temperature, etc. }
+  visitSummary      String?   @db.Text
+  diagnosis         String?   @db.Text
+  treatment         String?   @db.Text
+  labResults        Json?     // Array of lab result objects
+  medications       Json?     // Array of medication objects
+  
+  // Account status
+  isActive          Boolean   @default(true)
+  isVerified        Boolean   @default(false)
+  verificationToken String?
+  lastAccessDate    DateTime?
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  bills             Bill[]
+  auditLogs         AuditLog[]
+  
+  @@map("patients")
+}
+
+// Hospital Staff model (account management, reports)
+model Staff {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  password    String
+  firstName   String
+  lastName    String
+  role        String   // e.g., "Administrator", "Account Manager"
+  permissions String[] // Array of permissions
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("staff")
+}
+
+// Bill model for patient billing
+model Bill {
+  id            String   @id @default(uuid())
+  patientId     String
+  amount        Float
+  status        String   // "pending", "paid", "failed", "overdue"
+  paymentMethod String?  // "credit_card", "check"
+  description   String?
+  dueDate       DateTime?
+  paidAt        DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  @@map("bills")
+  @@index([patientId])
+  @@index([status])
+}
+
+// Audit Log model for HIPAA compliance
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String   // "access", "update", "create", "delete", "inactivate"
+  actorType   String   // "provider", "patient", "staff"
+  actorId     String   // Generic ID - not a foreign key, just stores the ID as string
+  patientId   String?
+  ipAddress   String
+  userAgent   String?
+  details     Json?    // Additional context
+  timestamp   DateTime @default(now())
+  
+  patient     Patient?  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  @@map("audit_logs")
+  @@index([actorId])
+  @@index([patientId])
+  @@index([timestamp])
+  @@index([action])
+}
