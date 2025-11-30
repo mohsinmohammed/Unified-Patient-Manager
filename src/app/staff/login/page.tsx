@@ -97,11 +97,11 @@ export default function StaffLoginPage() {
               {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
-
-          <div className="mt-6 p-4 bg-blue-50 rounded-md">
-            <p className="text-sm text-blue-800 font-medium mb-2">Test Credentials:</p>
-            <p className="text-sm text-blue-700">Email: admin@hospital.com</p>
-            <p className="text-sm text-blue-700">Password: password123</p>
+          
+          <div className="mt-6 text-center">
+            <a href="/" className="text-sm text-gray-600 hover:text-blue-600">
+              ← Back to Home
+            </a>
           </div>
         </div>
       </div>

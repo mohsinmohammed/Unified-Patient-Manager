@@ -108,12 +108,13 @@ export default function ProviderLoginPage() {
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
             </div>
-
-            <div className="text-center text-sm">
-              <span className="text-gray-600">Test credentials:</span>{' '}
-              <code className="text-xs bg-gray-100 px-2 py-1 rounded">doctor@hospital.com / password123</code>
-            </div>
           </form>
+          
+          <div className="mt-6 text-center">
+            <a href="/" className="text-sm text-gray-600 hover:text-blue-600">
+              ← Back to Home
+            </a>
+          </div>
         </div>
       </div>
     </Layout>

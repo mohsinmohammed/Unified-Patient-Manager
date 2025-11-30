@@ -31,38 +31,7 @@ export default function Layout({ children, userType }: LayoutProps) {
             {/* Navigation Links */}
             <div className="hidden md:flex space-x-8">
               {!userType && (
-                <>
-                  <Link
-                    href="/provider/login"
-                    className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
-                      isActive('/provider/login')
-                        ? 'text-blue-600 border-b-2 border-blue-600'
-                        : 'text-gray-700 hover:text-blue-600'
-                    }`}
-                  >
-                    Provider Login
-                  </Link>
-                  <Link
-                    href="/patient/login"
-                    className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
-                      isActive('/patient/login')
-                        ? 'text-blue-600 border-b-2 border-blue-600'
-                        : 'text-gray-700 hover:text-blue-600'
-                    }`}
-                  >
-                    Patient Login
-                  </Link>
-                  <Link
-                    href="/staff/login"
-                    className={`inline-flex items-center px-3 py-2 text-sm font-medium ${
-                      isActive('/staff/login')
-                        ? 'text-blue-600 border-b-2 border-blue-600'
-                        : 'text-gray-700 hover:text-blue-600'
-                    }`}
-                  >
-                    Staff Login
-                  </Link>
-                </>
+                <></>
               )}
 
               {userType === 'provider' && (
@@ -127,6 +96,15 @@ export default function Layout({ children, userType }: LayoutProps) {
                   >
                     Reports
                   </Link>
+                  <button
+                    onClick={() => {
+                      localStorage.clear();
+                      window.location.href = '/staff/login';
+                    }}
+                    className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600"
+                  >
+                    Sign Out
+                  </button>
                 </>
               )}
             </div>

@@ -106,11 +106,11 @@ export default function PatientLoginPage() {
               </button>
             </p>
           </div>
-
+          
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-500">
-              Test Account: john.doe@email.com / password123
-            </p>
+            <a href="/" className="text-sm text-gray-600 hover:text-blue-600">
+              ← Back to Home
+            </a>
           </div>
         </div>
       </div>
