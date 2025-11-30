@@ -101,7 +101,7 @@ Create a `.env` file in the root directory:
 
 ```env
 # Database
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/unified_patient_manager"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/unified_patient_manager"
 
 # Authentication
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
