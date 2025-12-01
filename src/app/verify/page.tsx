@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Layout from '@/components/Layout';
 
-export default function VerifyPage() {
+function VerifyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -117,5 +117,22 @@ export default function VerifyPage() {
         )}
       </div>
     </Layout>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <Layout userType={null}>
+        <div className="max-w-md mx-auto mt-12">
+          <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mb-4"></div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Loading...</h2>
+          </div>
+        </div>
+      </Layout>
+    }>
+      <VerifyContent />
+    </Suspense>
   );
 }

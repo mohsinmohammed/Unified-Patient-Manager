@@ -18,7 +18,17 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Generate Prisma Client
+# Create a minimal .env for build-time environment variables
+RUN echo 'DATABASE_URL="postgresql://user:pass@localhost:5432/db"' > .env
+RUN echo 'JWT_SECRET="build-time-secret"' >> .env
+RUN echo 'ENCRYPTION_KEY="12345678901234567890123456789012"' >> .env
+RUN echo 'STRIPE_SECRET_KEY="sk_test_build_time_mock_key"' >> .env
+RUN echo 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_build_time_mock_key"' >> .env
+
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl openssl-dev
+
+# Generate Prisma Client with correct binary targets
 RUN npx prisma generate
 
 # Build the Next.js application
@@ -30,6 +40,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Install OpenSSL for Prisma runtime
+RUN apk add --no-cache openssl
 
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs

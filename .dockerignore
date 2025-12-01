@@ -51,4 +51,3 @@ docker-compose*.yml
 # Misc
 .prettierrc*
 .eslintrc*
-tsconfig.json

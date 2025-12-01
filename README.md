@@ -362,8 +362,15 @@ Use any future expiration date, any 3-digit CVC, and any ZIP code.
 
 2. **Run the container:**
    ```bash
-   docker run -p 3001:3001 --env-file .env unified-patient-manager
+   # For Docker containers, use host.docker.internal to access host database
+   docker run -d -p 3001:3000 \
+     -e DATABASE_URL="postgresql://postgres:password123@host.docker.internal:5433/unified_patient_manager" \
+     --env-file .env \
+     --name unified-patient-manager \
+     unified-patient-manager
    ```
+
+   **Note:** When running in Docker, the database URL must use `host.docker.internal` instead of `localhost` to access services running on the host machine.
 
 ### Production Considerations
 
